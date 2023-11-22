@@ -1,10 +1,5 @@
 :root {
   --background-color: #282c34;
-  --calendar-day-color: #cecccc;
-  --calendar-day-weekend-button-color: #898a8a;
-  --calendar-day-neighboring-month-button: rgb(76, 76, 77);
-  --calendar-day-active: #3d779c;
-  --calendar-day-hover: #71aacd;
 }
 
 .app-container {
@@ -12,24 +7,8 @@
   height: 100vh;
 }
 
-.react-calendar, .react-calendar button {
-  background-color: transparent;
-  color: var(--calendar-day-color);
-  border: none;
-}
-.react-calendar button.react-calendar__month-view__days__day--weekend {
-  color: var(--calendar-day-weekend-button-color)
-}
-.react-calendar button.react-calendar__month-view__days__day--neighboringMonth {
-  color: var(--calendar-day-neighboring-month-button)
-}
-.react-calendar .react-calendar__tile--active {
-  background-color: var(--calendar-day-active);
-}
-.react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus {
-  background: none;
-  background-color: var(--calendar-day-hover);
-}
+
+
 
 
 
