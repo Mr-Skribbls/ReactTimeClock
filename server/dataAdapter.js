@@ -3,7 +3,7 @@ const helpers = require('./helpers');
 const isNil = require('lodash/isNil');
 
 // ----- Connect ----- //
-const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE);
+const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, helpers.errorHandle);
 // db.all()
 
 const createInsert = (database) => (sql, params) => new Promise((resolve, reject) => {
