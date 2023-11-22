@@ -1,0 +1,22 @@
+projects
+  id integer required primary key auto increment
+  name text required
+  activity text required
+  active integer required (1 = true, 0 = false)
+  description text
+
+time_blocks
+  project_id integer required references projects.id primary composite key
+  date text required references work_days.date primary composite key
+  allocated_time text required 
+
+work_days
+  date text required primary key
+  start_time text required
+  end_time text
+
+breaks
+  date text required references work_days.date composite primary key
+  start_time text required composite primary key
+  end_time text
+  description text

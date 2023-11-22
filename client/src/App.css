@@ -1,0 +1,73 @@
+:root {
+  --background-color: #282c34;
+  --calendar-day-color: #cecccc;
+  --calendar-day-weekend-button-color: #898a8a;
+  --calendar-day-neighboring-month-button: rgb(76, 76, 77);
+  --calendar-day-active: #3d779c;
+  --calendar-day-hover: #71aacd;
+}
+
+.app-container {
+  background-color: var(--background-color);
+  height: 100vh;
+}
+
+.react-calendar, .react-calendar button {
+  background-color: transparent;
+  color: var(--calendar-day-color);
+  border: none;
+}
+.react-calendar button.react-calendar__month-view__days__day--weekend {
+  color: var(--calendar-day-weekend-button-color)
+}
+.react-calendar button.react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--calendar-day-neighboring-month-button)
+}
+.react-calendar .react-calendar__tile--active {
+  background-color: var(--calendar-day-active);
+}
+.react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus {
+  background: none;
+  background-color: var(--calendar-day-hover);
+}
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
