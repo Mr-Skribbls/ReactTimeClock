@@ -1,4 +1,4 @@
-const { dataAdapter } = require("../dataAdapter");
+const dataAdapter = require('../dataAdapter');
 const reduce = require('lodash/reduce');
 
 const parseProjectForDb = (project) => reduce(project, (project, value, key) => {
@@ -26,7 +26,7 @@ async function createProject(req, res, next) {
     const result = parseProjectForAPI(await dataAdapter.read.project(id));
     res.json(result);
   } catch(error) {
-    res.status(400).send(error);
+    res.status(400).json(error);
   }
 }
 

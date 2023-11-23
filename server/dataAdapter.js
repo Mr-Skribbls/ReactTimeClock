@@ -1,47 +1,18 @@
 const sqlite3 = require('sqlite3').verbose();
 const helpers = require('./helpers');
 const isNil = require('lodash/isNil');
+const {createInsert, createQuery, createGet, createUpdate} = require('./dataQueries');
 
 // ----- Connect ----- //
 const db = new sqlite3.Database('./data.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, helpers.errorHandle);
-// db.all()
 
-const createInsert = (database) => (sql, params) => new Promise((resolve, reject) => {
-  database.run(sql, params, function (error) {
-    if(error) reject(error);
-    resolve(this.lastID);
-  });
-});
 const insert = createInsert(db);
-
-const createQuery = (database) => (sql, params) => new Promise((resolve, reject) => {
-  database.all(sql, params, (error, rows) => {
-    if(error) reject(error);
-    resolve(rows);
-  });
-});
 const query = createQuery(db);
-
-const createGet = (database) => (sql, params) => new Promise((resolve, reject) => {
-  database.get(sql, params, (error, rows) => {
-    if(error) reject(error);
-    resolve(rows);
-  });
-});
 const get = createGet(db);
-
-const createUpdate = (database) => (sql, params) => new Promise((resolve, reject) => {
-  database.run(sql, params, (error) => {
-    if(error) reject(error);
-    resolve();
-  });
-});
 const set = createUpdate(db);
 
 // ----- Create Tables ----- //
 const createDb = () => {
-  let sql;
-
   // projects
   query(`CREATE TABLE IF NOT EXISTS projects
     (
@@ -110,6 +81,17 @@ const create = {
       project.description,
     ]);
   },
+  workDay: (workDay) => {
+    const sql = `
+      INSERT INTO work_days(date, start_time, end_time)
+      VALUES (?, ?, ?)
+    `;
+    return insert(sql, [
+      workDay.date,
+      workDay.startTime,
+      workDay.endTime,
+    ]);
+  },
 };
 
 // ----- Read ----- //
@@ -134,6 +116,17 @@ const read = {
     const sql = `${projectsReadBase};`;
     return query(sql);
   },
+  workDay: (date) => {
+    if(isNil(date)) throw 'No date provided';
+    const sql = `
+      SELECT date
+        , start_time
+        , end_time
+      FROM work_days
+      WHERE date = ?;
+    `;
+    return get(sql, [date]);
+  },
 };
 
 // ----- Update ----- //
@@ -149,6 +142,17 @@ const update = {
     `;
     return set(sql, [value.active, value.description, id]);
   },
+  workDay: (date, value) => {
+    if(isNil(date)) throw 'No date provided';
+    if(date !== value.date) throw 'Dates do not match';
+    const sql = `
+      UPDATE work_days
+      SET start_time = ?
+        , end_time = ?
+      WHERE date = ?;
+    `;
+    return set(sql, [value.startTime, value.endTime, date]);
+  },
 };
 
 // ----- Delete ----- //
@@ -158,7 +162,7 @@ const remove = {
 
 createDb();
 
-exports.dataAdapter = {
+module.exports = {
   create,
   read,
   update,

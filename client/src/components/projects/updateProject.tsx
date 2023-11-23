@@ -1,16 +1,16 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { IProject } from "../../hooks/useProjects";
+import { Project } from "../../hooks/useProjects";
 
 interface UpdateProjectProps {
-  project: IProject,
-  updateProject: (project: IProject) => Promise<IProject | undefined>
+  project: Project,
+  updateProject: (project: Project) => Promise<Project | undefined>
 }
 
 const UpdateProject: FC<UpdateProjectProps> = ({
   project,
   updateProject,
 }) => {
-  const [formProject, setFormProject] = useState<IProject>(project);
+  const [formProject, setFormProject] = useState<Project>(project);
 
   useEffect(() => {
     setFormProject(project);

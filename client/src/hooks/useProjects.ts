@@ -1,7 +1,7 @@
 import isNil from 'lodash/isNil';
 import { useState, useEffect, useCallback } from 'react';
 
-export interface IProject {
+export interface Project {
   id?: number,
   name: string,
   activity: string,
@@ -10,7 +10,7 @@ export interface IProject {
 }
 
 const useProjects = () => {
-  const [projects, setProjects] = useState<IProject[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     fetch('/api/projects')
@@ -21,7 +21,7 @@ const useProjects = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  const createProject = useCallback((project: IProject) => {
+  const createProject = useCallback((project: Project) => {
     const promise = fetch('api/projects', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,7 @@ const useProjects = () => {
     return projects.find((project) => project.id === projectId) || emptyProject;
   }, [projects]);
 
-  const updateProject = useCallback(async (project: IProject): Promise<IProject | undefined> => {
+  const updateProject = useCallback(async (project: Project): Promise<Project | undefined> => {
     try {
       console.log(project);
       let response = await fetch(`api/projects/${project.id}`, {
@@ -68,7 +68,7 @@ const useProjects = () => {
         throw Error(`Error: ${await response.json()}`);
       }
 
-      let data = await response.json() as IProject;
+      let data = await response.json() as Project;
 
       if (isNil(data)) {
         throw Error('Update request did not respond with project');
@@ -88,7 +88,7 @@ const useProjects = () => {
     }
   }, [projects]);
 
-  const sortProjects = (a: IProject, b: IProject) => {
+  const sortProjects = (a: Project, b: Project) => {
     if (isNil(a.id)) {
       return -1;
     }

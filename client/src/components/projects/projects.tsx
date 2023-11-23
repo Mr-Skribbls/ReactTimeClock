@@ -1,17 +1,17 @@
 import { useState, ChangeEvent, FC } from 'react';
 import './projects.css';
-import { IProject } from '../../hooks/useProjects';
+import { Project } from '../../hooks/useProjects';
 
-interface ProjectProps {
-  projects: IProject[],
-  createProject: (project: IProject) => Promise<Response>
+interface ProjectViewProps {
+  projects: Project[],
+  createProject: (project: Project) => Promise<Response>
 }
 
-const Project: FC<ProjectProps> = ({
+const ProjectView: FC<ProjectViewProps> = ({
   projects,
   createProject,
 }) => {
-  const [formProject, setFormProject] = useState<IProject>({
+  const [formProject, setFormProject] = useState<Project>({
     name: '',
     activity: '',
     active: true,
@@ -80,4 +80,4 @@ const Project: FC<ProjectProps> = ({
   );
 };
 
-export default Project;
+export default ProjectView;

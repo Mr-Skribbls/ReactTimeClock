@@ -5,6 +5,10 @@
 .app-container {
   background-color: var(--background-color);
   height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: stretch;
 }
 
 

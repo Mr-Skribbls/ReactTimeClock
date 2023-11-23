@@ -1,6 +1,7 @@
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 const { createProject, readProjects, updateProject } = require('./controllers/projects');
+const { createWorkDay, readWorkDay, updateWorkDay } = require('./controllers/workDays');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -53,6 +54,7 @@ app.get(
 app.put(
   '/api/projects/:id',
   validate([
+    param('id').escape(),
     body('id').notEmpty().escape(),
     body('active').notEmpty().escape(),
     body('description').escape(),
@@ -64,8 +66,37 @@ app.put(
 
 // ----- Work Days ----- //
 // create
+app.post(
+  '/api/work_days',
+  validate([
+    body('date').notEmpty().escape(),
+    body('startTime').escape(),
+    body('endTime').escape(),
+  ]),
+  createWorkDay,
+);
+
 // read
+app.get(
+  '/api/work_days/:date',
+  validate([
+    param('date').escape(),
+  ]),
+  readWorkDay,
+);
+
 // update
+app.put(
+  '/api/work_days/:date',
+  validate([
+    param('date').escape(),
+    body('date').notEmpty().escape(),
+    body('startTime').exists().escape(),
+    body('endTime').exists().escape(),
+  ]),
+  updateWorkDay,
+);
+
 // delete
 
 // ----- Time Blocks ----- //
