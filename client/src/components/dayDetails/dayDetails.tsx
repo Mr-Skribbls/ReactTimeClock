@@ -1,9 +1,10 @@
-import { Dispatch, FC, SetStateAction, MouseEvent, ChangeEvent } from "react";
-import AppCalendar, { CalendarValue } from "../calendar/calendar";
-import { WorkDay } from "../../hooks/useWorkDay";
+import { Dispatch, FC, SetStateAction, MouseEvent, ChangeEvent, useState, useEffect, useCallback } from 'react';
+import AppCalendar, { CalendarValue } from '../calendar/calendar';
+import { WorkDay } from '../../hooks/useWorkDay';
 import './dayDetails.css';
-import isNil from "lodash/isNil";
-import { toNumber } from "lodash";
+import isNil from 'lodash/isNil';
+import isEmpty from 'lodash/isEmpty';
+import toNumber from 'lodash/toNumber';
 
 interface DayDetailsCalendarProps {
   date: CalendarValue
@@ -25,6 +26,49 @@ const DayDetails: FC<DayDetailsProps> = ({
   calendar,
   workDayProps,
 }) => {
+  const [accruedTime, setAccruedTime] = useState('');
+
+  const getCurrentTime = useCallback(() =>  {
+    const d = new Date();
+    return `${toDoubleDigit(d.getHours())}.${toDoubleDigit(d.getMinutes())}`;
+  }, []);
+
+  useEffect(() => {
+    const getAccruedTime = (workDay: WorkDay) => {
+      if(isNil(workDay.startTime)) return '00.00';
+
+      const startTime = workDay.startTime;
+      const endTime = isNil(workDay.endTime) || isEmpty(workDay.endTime) ? getCurrentTime() : workDay.endTime;
+
+      const minutesPerHour = 60;
+
+      const splitStart = startTime.split('.');
+      const startHours = splitStart[0];
+      const startMinutes = splitStart[1];
+      const totalStartMinutes = (toNumber(startHours) * minutesPerHour) + toNumber(startMinutes);
+
+      const splitEnd = endTime.split('.');
+      const endHours = splitEnd[0];
+      const endMinutes = splitEnd[1];
+      const totalEndMinutes = (toNumber(endHours) * minutesPerHour) + toNumber(endMinutes);
+
+      const deltaMinutes = totalEndMinutes - totalStartMinutes;
+      const hours = Math.floor(deltaMinutes) / minutesPerHour;
+      const minutes = deltaMinutes % minutesPerHour;
+
+      return `${toDoubleDigit(hours)}.${toDoubleDigit(minutes)}`;
+    };
+
+    const interval = setInterval(() => {
+      if (!isNil(workDayProps.workDay)) {
+        setAccruedTime(getAccruedTime(workDayProps.workDay));
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [workDayProps.workDay, getCurrentTime]);
 
   const toDoubleDigit = (n: number) => {
     return n.toLocaleString('en-US', {
@@ -34,29 +78,8 @@ const DayDetails: FC<DayDetailsProps> = ({
     });
   };
 
-  const getAccruedTime = (workDay: WorkDay) => {
-    const minutesPerHour = 60;
-
-    const splitStart = workDay.startTime.split('.');
-    const startHours = splitStart[0];
-    const startMinutes = splitStart[1];
-    const totalStartMinutes = (toNumber(startHours) * minutesPerHour) + toNumber(startMinutes);
-
-    const splitEnd = workDay.endTime.split('.');
-    const endHours = splitEnd[0];
-    const endMinutes = splitEnd[1];
-    const totalEndMinutes = (toNumber(endHours) * minutesPerHour) + toNumber(endMinutes);
-
-    const deltaMinutes = totalEndMinutes - totalStartMinutes;
-    const hours = Math.floor(deltaMinutes) / minutesPerHour;
-    const minutes = deltaMinutes % minutesPerHour;
-
-    return `${toDoubleDigit(hours)}.${toDoubleDigit(minutes)}`;
-  };
-
   const handleStart = (event: MouseEvent) => {
-    const d = new Date();
-    workDayProps.setStart(`${toDoubleDigit(d.getHours())}.${toDoubleDigit(d.getMinutes())}`);
+    workDayProps.setStart(getCurrentTime());
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +116,7 @@ const DayDetails: FC<DayDetailsProps> = ({
               name="end-time"
               value={workDayProps.workDay.endTime}
               onChange={handleChange} />
-            <div>{getAccruedTime(workDayProps.workDay)}</div>
+            <div>{accruedTime}</div>
           </div> :
           <div>
             <button onClick={handleStart}>Start</button>
