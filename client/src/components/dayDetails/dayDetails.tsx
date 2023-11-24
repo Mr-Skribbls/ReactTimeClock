@@ -1,10 +1,10 @@
 import { Dispatch, FC, SetStateAction, MouseEvent, ChangeEvent, useState, useEffect, useCallback } from 'react';
 import AppCalendar, { CalendarValue } from '../calendar/calendar';
 import { WorkDay } from '../../hooks/useWorkDay';
-import './dayDetails.css';
 import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
 import toNumber from 'lodash/toNumber';
+import './dayDetails.css';
 
 interface DayDetailsCalendarProps {
   date: CalendarValue
@@ -100,20 +100,20 @@ const DayDetails: FC<DayDetailsProps> = ({
   };
 
   return (
-    <div className="day-details">
+    <div className='day-details'>
       <AppCalendar date={calendar.date} setDate={calendar.setDate} />
       <div>
         {
           workDayProps.workDay ?
           <div>
             <input
-              type="text"
-              name="start-time"
+              type='text'
+              name='start-time'
               value={workDayProps.workDay.startTime}
               onChange={handleChange} />
             <input
-              type="text"
-              name="end-time"
+              type='text'
+              name='end-time'
               value={workDayProps.workDay.endTime}
               onChange={handleChange} />
             <div>{accruedTime}</div>

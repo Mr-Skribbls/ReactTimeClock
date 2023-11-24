@@ -1,0 +1,46 @@
+.projects-list {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.7rem;
+  color: var(--text-color);
+  overflow: auto;
+}
+
+.projects-list .projects-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.projects-list .project {
+  margin: 3px;
+  padding: 5px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-list .project > * {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.projects-list h1 {
+  font-size: 1.2rem;
+  margin: 0 auto;
+}
+
+.projects-list h2 {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.projects-list form.project-editor {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

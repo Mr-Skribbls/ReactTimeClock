@@ -4,6 +4,7 @@ import useProjects from './hooks/useProjects';
 import { CalendarValue } from './components/calendar/calendar';
 import DayDetails from './components/dayDetails/dayDetails';
 import './App.css';
+import ProjectsLists from './components/projects/projectsList/projectsList';
 
 function App() {
   const [date, setDate] = useState<CalendarValue>(new Date());
@@ -12,7 +13,10 @@ function App() {
 
   return (
     <div className='app-container'>
-      <DayDetails calendar={{date, setDate}} workDayProps={{workDay, setStart, setEnd}} />
+      <div className='column-container'>
+        <DayDetails calendar={{date, setDate}} workDayProps={{workDay, setStart, setEnd}} />
+        <ProjectsLists projects={projects} createProject={createProject} updateProject={updateProject} />
+      </div>
     </div>
   );
 }

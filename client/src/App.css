@@ -1,5 +1,6 @@
 :root {
   --background-color: #282c34;
+  --text-color: #dcdcdc;
 }
 
 .app-container {
@@ -7,6 +8,13 @@
   height: 100vh;
   display: flex;
   flex-direction: row;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.column-container {
+  display: flex;
+  flex-direction: column;
   align-items: stretch;
   align-content: stretch;
 }
